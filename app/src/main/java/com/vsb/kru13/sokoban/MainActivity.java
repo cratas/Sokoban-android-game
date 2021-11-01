@@ -51,38 +51,18 @@ public class MainActivity extends AppCompatActivity {
             }
 
             sokoView.setAllLevels(intLevels, maxLevelWidth, maxLevelHeight);
-
-            if(levelNum == 1) {
-                int[] level = convertToIntArray(levels[0]);
-                sokoView.setLevel(level, 0);
-                Log.d("text", Integer.toString(level.length));
-            }
-            if(levelNum == 2) {
-                int[] level = convertToIntArray(levels[1]);
-                sokoView.setLevel(level, 1);
-                Log.d("text", Integer.toString(level.length));
-            }
-            if(levelNum == 3) {
-                int[] level = convertToIntArray(levels[2]);
-                sokoView.setLevel(level, 2);
-                Log.d("text", Integer.toString(level.length));
-            }
-            if(levelNum == 4) {
-                int[] level = convertToIntArray(levels[3]);
-                sokoView.setLevel(level, 3);
-                Log.d("text", Integer.toString(level.length));
-            }
-            if(levelNum == 5) {
-                int[] level = convertToIntArray(levels[5]);
-                sokoView.setLevel(level, 4);
-                Log.d("text", Integer.toString(level.length));
-            }
+            startNewLevel(levelNum, levels);
 
         } catch(IOException e) {
             e.printStackTrace();
         }
 
 
+    }
+
+    private void startNewLevel(int levelNumber, String[] levels) {
+        int[] level = convertToIntArray(levels[levelNumber]);
+        sokoView.setLevel(level, levelNumber);
     }
 
     private String[] makeStringArrayAndFillRows(String oldString) {
@@ -174,6 +154,6 @@ public class MainActivity extends AppCompatActivity {
             currentMax++;
         }
 
-        return  max - 1; //-1 because of /r on the of line
+        return  max-1; //-1 because of /r on the of line
     }
 }

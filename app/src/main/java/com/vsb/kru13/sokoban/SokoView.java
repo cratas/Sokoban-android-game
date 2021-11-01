@@ -33,7 +33,7 @@ public class SokoView extends View{
     float xUnClickedPosition = 0;
     float yUnClickedPosition = 0;
 
-    int currentLevel = 0;
+    int currentLevel = 1;
 
     boolean up = false;
     boolean down = false;
@@ -304,7 +304,7 @@ public class SokoView extends View{
         }
 
         if(!boxExists) {
-            if(currentLevel < 5) {
+            if(currentLevel < 15) {
                 setLevel(allLevels[++currentLevel], currentLevel);
             } else {
                 Toast.makeText(getContext(), "YOU WON!", Toast.LENGTH_LONG).show();
