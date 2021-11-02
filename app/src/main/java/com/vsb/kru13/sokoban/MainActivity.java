@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         AssetManager assetManager = getAssets();
         InputStream input;
         try {
-            input = assetManager.open("testing_levels.txt");
+            input = assetManager.open("levels.txt");
             int size = input.available();
             byte[] buffer = new byte[size];
             input.read(buffer);
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity {
                 intLevels[i] = convertToIntArray(levels[i]);
             }
 
-            sokoView.setAllLevels(intLevels, 13, 11);
-            startNewLevel(levelNum, levels);
+            sokoView.setAllLevels(intLevels, maxLevelWidth, maxLevelHeight);
+            startNewLevel(levelNum - 1, levels); // -1 because of indexing from 0
 
         } catch(IOException e) {
             e.printStackTrace();
