@@ -11,7 +11,7 @@ public class Level {
         this.id = id;
         this.image = image;
         this.name = "Level " +  Integer.toString(id + 1);
-        this.highestScoreString ="Higher score: 0";
+        this.highestScoreString ="Highest score: 0";
         this.highestScore = 0;
     }
 
