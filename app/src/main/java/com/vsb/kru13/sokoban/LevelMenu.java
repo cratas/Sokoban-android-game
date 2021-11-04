@@ -19,10 +19,14 @@ public class LevelMenu extends AppCompatActivity {
     ListView listView;
     DBHelper dbHelper;
 
+
+
+
     @Override
     protected void onRestart() {
         super.onRestart();
-        generateListView();
+        createListView();
+
     }
 
     @Override
@@ -30,11 +34,12 @@ public class LevelMenu extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_level_menu);
 
-        generateListView();
+        createListView();
+
     }
 
-    private void generateListView()
-    {
+    private void createListView() {
+        //initializing listView
         listView = findViewById(R.id.listview);
         ArrayList<Level> levelArrayList = new ArrayList<>();
         dbHelper = new DBHelper(getApplicationContext());
@@ -45,7 +50,9 @@ public class LevelMenu extends AppCompatActivity {
                 String id = cursor.getString(cursor.getColumnIndex("id"));
                 String image = cursor.getString(cursor.getColumnIndex("image"));
                 String highestScore = cursor.getString(cursor.getColumnIndex("highest_score"));
+
                 levelArrayList.add(new Level(Integer.parseInt(id), Integer.parseInt(image), Integer.parseInt(highestScore)));
+
                 cursor.moveToNext();
             }
         }
