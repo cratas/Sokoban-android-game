@@ -42,7 +42,7 @@ public class LevelAdapter extends ArrayAdapter<Level> {
 
         levelName.setText(getItem(position).getName());
 
-        highestScore.setText(getItem(position).getHighestScoreString());
+        highestScore.setText("Highest Score: " + getItem(position).getHighestScore());
 
         return convertView;
     }

@@ -2,6 +2,7 @@ package com.vsb.kru13.sokoban;
 
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -17,7 +18,12 @@ import android.widget.Toast;
  */
 public class SokoView extends View{
 
+    DBHelper dbHelper;
+    int movesCount;
+
     Bitmap[] bmp;
+
+    int bestScore;
 
     int lx;
     int ly;
@@ -33,7 +39,8 @@ public class SokoView extends View{
     float xUnClickedPosition = 0;
     float yUnClickedPosition = 0;
 
-    int currentLevel = 1;
+    int currentLevel = 0;
+    int currentLevelRecord;
 
     boolean up = false;
     boolean down = false;
@@ -131,7 +138,29 @@ public class SokoView extends View{
     }
 
     public void setLevel(int[] newLevel, int lvlNumber) {
+
         currentLevel = lvlNumber;
+
+        dbHelper = new DBHelper(getContext());
+
+        Cursor cursor = dbHelper.getData();
+
+        if (cursor.moveToFirst()){
+            while(!cursor.isAfterLast()){
+                String id = cursor.getString(cursor.getColumnIndex("id"));
+                String highestScore = cursor.getString(cursor.getColumnIndex("highest_score"));
+
+                if(Integer.parseInt(id) == currentLevel) {
+                    currentLevelRecord = Integer.parseInt(highestScore);
+                }
+
+                cursor.moveToNext();
+            }
+        }
+
+
+        Toast.makeText(getContext(), "DB actural level:" + Integer.toString(currentLevelRecord),Toast.LENGTH_LONG).show();
+
         for (int i = 0; i < lx; i++) {
             for (int j = 0; j < ly; j++) {
                 if(newLevel[i*ly + j] == 4) {
@@ -239,6 +268,7 @@ public class SokoView extends View{
             }
         }
 
+        movesCount++;
         level[yHero * ly + xHero] = levelMemory[yHero * ly + xHero];
         level[yHero * ly + --xHero] = PLAYER;
         invalidate();
@@ -264,6 +294,7 @@ public class SokoView extends View{
             }
         }
 
+        movesCount++;
         level[yHero * ly + xHero] = levelMemory[yHero * ly + xHero];
         level[--yHero * ly + xHero] = PLAYER;
         invalidate();
@@ -277,6 +308,7 @@ public class SokoView extends View{
             if (level[(yHero + 2) * ly + xHero] == BOX || level[(yHero + 2) * ly + xHero] == WALL || level[(yHero + 2) * ly + xHero] == GOAL_BOX) {
                 return;
             } else {
+
                 level[(yHero+1) * ly + xHero] = PLAYER;
                 if(level[(yHero+2) * ly + xHero] == GOAL) {
                     level[(yHero+2) * ly + xHero] = GOAL_BOX;
@@ -289,6 +321,7 @@ public class SokoView extends View{
             }
         }
 
+        movesCount++;
         level[yHero * ly + xHero] = levelMemory[yHero * ly + xHero];
         level[++yHero * ly + xHero] = PLAYER;
         invalidate();
@@ -304,8 +337,16 @@ public class SokoView extends View{
         }
 
         if(!boxExists) {
+            if(movesCount < currentLevelRecord || currentLevelRecord == 0) {
+                Boolean isUpdated = dbHelper.updateLevelsData(Integer.toString(currentLevel), Integer.toString(movesCount));
+
+                if(isUpdated) Toast.makeText(getContext(), "Updated " + Integer.toString(currentLevelRecord),Toast.LENGTH_LONG).show();
+
+            }
+
             if(currentLevel < 15) {
                 setLevel(allLevels[++currentLevel], currentLevel);
+
             } else {
                 Toast.makeText(getContext(), "YOU WON!", Toast.LENGTH_LONG).show();
             }

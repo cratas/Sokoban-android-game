@@ -59,6 +59,24 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
+    public Boolean updateLevelsData(String id, String highestScore) {
+        SQLiteDatabase DB = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("highest_score", highestScore);
+        Cursor cursor = DB.rawQuery("Select * from Levels where id = ?", new String[]{id});
+        if(cursor.getCount() > 0) {
+            long result = DB.update("Levels", contentValues,"id=?", new String[]{id});
+
+            if(result==1) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
+    }
+
     public Cursor getData() {
         SQLiteDatabase DB = this.getWritableDatabase();
         Cursor cursor = DB.rawQuery("Select * from Levels", null);

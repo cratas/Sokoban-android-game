@@ -4,23 +4,13 @@ public class Level {
     int id;
     int image;
     String name;
-    String highestScoreString;
     int highestScore;
 
-    public Level(int id, int image) {
+    public Level(int id, int image, int highestScore) {
         this.id = id;
         this.image = image;
         this.name = "Level " +  Integer.toString(id + 1);
-        this.highestScoreString ="Highest score: 0";
-        this.highestScore = 0;
-    }
-
-    public String getHighestScoreString() {
-        return highestScoreString;
-    }
-
-    public void setHighestScoreString(String highestScoreString) {
-        this.highestScoreString = highestScoreString;
+        this.highestScore = highestScore;
     }
 
     public int getId() {
